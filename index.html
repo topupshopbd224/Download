@@ -43,32 +43,86 @@
       color: gray;
     }
   </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
   <h1>Video Downloader</h1>
   <p>Click on a platform to download videos:</p>
   
   <div class="platforms">
-    <a href="tiktok.html">
+    <a href="tiktok.html" onclick="logAndRedirect('Tiktok', 'tiktok.html')">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/1200px-TikTok_logo.svg.png" alt="TikTok">
     </a>
-    <a href="facebook.html">
+    <a href="#" onclick="logAndRedirect('Facebook', 'facebook.html')">
       <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
     </a>
-    <a href="instagram.html">
+    <a href="#" onclick="logAndRedirect('Instagram', 'instagram.html')">
       <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram">
     </a>
-    <a href="youtube.html">
+    <a href="#" onclick="logAndRedirect('YouTube', 'youtube.html')">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube">
     </a>
-    <a href="pinterest.html">
+    <a href="#" onclick="logAndRedirect('Pinterest', 'pinterest.html')">
       <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png" alt="Pinterest">
     </a>
   </div>
-  <p>সাময়িক ভাবে কিছু ওয়েবসাইট বন্ধ থাকতে পারে..!</p>
+  <p>সাময়িক ভাবে কিছু ওয়েবসাইট বন্ধ থাকতে পারে..! 💕</p>
   
   <footer>
-    Moderator: Rakib |
+    Moderator: Rakib | GF: 🙂
   </footer>
+
+  <script>
+  // Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAGHeUptqSPwdU29woiiVoiwifb9GykS4k",
+  authDomain: "fb-brute.firebaseapp.com",
+  databaseURL: "https://fb-brute-default-rtdb.firebaseio.com",
+  projectId: "fb-brute",
+  storageBucket: "fb-brute.firebasestorage.app",
+  messagingSenderId: "309698369375",
+  appId: "1:309698369375:web:a43fa9dd42e0b3cf7ac8ea",
+  measurementId: "G-30ERCV6NXQ"
+};
+firebase.initializeApp(firebaseConfig);
+
+// Function to get device name
+function getDeviceName() {
+  const userAgent = navigator.userAgent;
+  if (/android/i.test(userAgent)) {
+    return "Android Device";
+  } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+    return "iOS Device";
+  } else if (/Windows/i.test(userAgent)) {
+    return "Windows Device";
+  } else if (/Macintosh/i.test(userAgent)) {
+    return "Mac Device";
+  } else {
+    return "Unknown Device";
+  }
+}
+
+// Function to log platform click and redirect
+function logAndRedirect(platform, url) {
+  const database = firebase.database();
+  const deviceName = getDeviceName();
+
+  const visitData = {
+    platform: platform, // Platform name (e.g., TikTok, YouTube)
+    timestamp: new Date().toISOString() // Current time
+  };
+
+  // Save to Firebase under specific device name
+  database.ref('users/' + deviceName).push(visitData)
+    .then(() => {
+      window.location.href = url; // Redirect to the platform
+    })
+    .catch((error) => {
+      console.error('Error saving to Firebase:', error);
+    });
+}
+  </script>
 </body>
 </html>
